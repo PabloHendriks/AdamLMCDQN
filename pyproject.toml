@@ -1,0 +1,19 @@
+[project]
+name = "adamlmcdqn"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "distrax>=0.1.5",
+    "evosax>=0.2.0",
+    "flashbax>=0.1.3",
+    "flax>=0.10.6",
+    "gymnax>=0.0.8",
+    "jax>=0.6.0",
+    "jaxlib>=0.1.74",
+    "navix>=0.7.0",
+    "numpy>=2.2.5",
+    "optax>=0.2.4",
+    "wandb>=0.19.11",
+]
