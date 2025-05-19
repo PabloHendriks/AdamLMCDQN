@@ -31,7 +31,7 @@ alpha1: 0.9
 alpha2: 0.999
 eps: 1.0e-8
 inverse_temperature: 10.0e+4
-J: 10
+J: 1
 a: 0.1
 
 # Experiment parameters

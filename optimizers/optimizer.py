@@ -25,7 +25,6 @@ def langevin_adam(
     """
     Implements Adam with injected Langevin noise as proposed in https://arxiv.org/abs/2305.18246.
     """
-    @chex.assert_max_traces(n=1)
     def init_fn(params):
         m = jax.tree.map(jnp.zeros_like, params)
         v = jax.tree.map(jnp.zeros_like, params)
