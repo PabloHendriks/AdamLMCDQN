@@ -45,7 +45,7 @@ requires-dist = [
     { name = "flax", specifier = ">=0.10.6" },
     { name = "gymnax", specifier = ">=0.0.8" },
     { name = "jax", specifier = ">=0.6.0" },
-    { name = "jaxlib", specifier = ">=0.1.74" },
+    { name = "jaxlib", specifier = ">=0.6.0" },
     { name = "navix", specifier = ">=0.7.0" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "optax", specifier = ">=0.2.4" },
