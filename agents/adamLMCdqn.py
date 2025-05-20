@@ -287,10 +287,4 @@ def main(config):
 
         outs = jax.block_until_ready(train_jit(seed))
 
-        wandb.log(outs["metrics"])
-
         wandb.finish()
-
-
-if __name__ == "__main__":
-    main()
