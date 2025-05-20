@@ -37,7 +37,7 @@ def langevin_adam(
 
         # standard Adam update
         adam_step = jax.tree.map(
-            lambda m_h, v_h, g: -learning_rate * (g + 0.3 * m_h / (jnp.sqrt(v_h) + eps)),
+            lambda m_h, v_h, g: -learning_rate * (g + a * m_h / (jnp.sqrt(v_h) + eps)),
             state.m, state.v, updates
         )
 
