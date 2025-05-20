@@ -263,23 +263,33 @@ def make_train(config):
 
 
 def main(config):
+    experiment = config["EXPERIMENT_NAME"]
+    if experiment != "":
+        tags = config["TAGS"] + ['AdamLMCDQN', experiment]
+    else:
+        tags = config["TAGS"] + ['AdamLMCDQN']
 
-    tags = config["TAGS"] + ['AdamLMCDQN', config["EXPERIMENT_NAME"]]
+    base_seed = jax.random.PRNGKey(config["SEED"])
+    seeds = jax.random.split(base_seed, num=config["NUM_SEEDS"])
 
-    wandb.init(
-        entity=config["ENTITY"],
-        project=config["PROJECT"],
-        tags=tags,
-        name=f'rp_adamLMCDQN_{config["ENV_NAME"]}',
-        config=config,
-        mode=config["WANDB_MODE"],
-    )
+    train_jit = jax.jit(make_train(config))
 
-    rng = jax.random.PRNGKey(config["SEED"])
-    rngs = jax.random.split(rng, config["NUM_SEEDS"])
-    train_vjit = jax.jit(jax.vmap(make_train(config)))
-    outs = jax.block_until_ready(train_vjit(rngs))
-    wandb.finish()
+    for seed in seeds:
+
+        wandb.init(
+            entity=config["ENTITY"],
+            project=config["PROJECT"],
+            tags=tags,
+            name=f'rp_adamLMCDQN_{config["ENV_NAME"]}',
+            config=config,
+            mode=config["WANDB_MODE"],
+        )
+
+        outs = jax.block_until_ready(train_jit(seed))
+
+        wandb.log(outs["metrics"])
+
+        wandb.finish()
 
 
 if __name__ == "__main__":
