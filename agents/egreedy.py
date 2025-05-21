@@ -252,9 +252,9 @@ def make_train(config):
 def main(config):
     experiment = config["EXPERIMENT_NAME"]
     if experiment != "":
-        tags = config["TAGS"] + ['E-Greedy', experiment]
+        tags = config["TAGS"] + ["E-Greedy", experiment]
     else:
-        tags = config["TAGS"] + ['E-Greedy']
+        tags = config["TAGS"] + ["E-Greedy"]
 
     base_seed = jax.random.PRNGKey(config["SEED"])
     seeds = jax.random.split(base_seed, num=config["NUM_SEEDS"])
