@@ -2,6 +2,7 @@ import yaml
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from agents.adamLMCdqn import main as adamLMCDQN
+from agents.egreedy import main as egreedy
 
 def worker(base_config, a, inverse_temperature):
     # Copy base config to avoid shared-state mutations
@@ -17,7 +18,7 @@ if __name__ == "__main__":
         base_config = yaml.safe_load(f)
 
     # Load hyperparameter sweep values
-    with open("configs/sweeps/a_and_inverse_temperature_sweep.yaml", "r") as f:
+    with open("configs/experiments/a_and_inverse_temperature_sweep.yaml", "r") as f:
         sweep = yaml.safe_load(f)
 
     # Prepare argument tuples for each combination
@@ -36,3 +37,5 @@ if __name__ == "__main__":
         for future in as_completed(futures):
             # Optionally handle return values or exceptions
             result = future.result()
+
+    egreedy(config=base_config)
