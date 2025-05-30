@@ -48,7 +48,13 @@ def make_train(config):
 
     config["NUM_UPDATES"] = config["TOTAL_TIMESTEPS"] // config["NUM_ENVS"]
 
-    basic_env, env_params = gymnax.make(config["ENV_NAME"])
+    if config["ENV_NAME"] == "DeepSea-bsuite":
+        if not config["size_deepSea"]:
+            config["size_deepSea"] = 20
+        basic_env, env_params = gymnax.make(config["ENV_NAME"], size=config["size_deepSea"])
+    else:
+        basic_env, env_params = gymnax.make(config["ENV_NAME"])
+
     env = FlattenObservationWrapper(basic_env)
     env = LogWrapper(env)
 
