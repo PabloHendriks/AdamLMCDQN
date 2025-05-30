@@ -4,7 +4,7 @@ ENTITY: ""
 PROJECT: "RP-AdamLMCDQN"
 TAGS: ["DQN"]
 
-ENV_NAME: "MetaMaze-misc"
+ENV_NAME: "Acrobot-v1"
 
 # Algorithm commons
 NUM_ENVS: 10
@@ -35,4 +35,4 @@ J: 1
 a: 1
 
 # Experiment parameters
-EXPERIMENT_NAME: "A_Temp_LR Experiment - MetaMaze"
+EXPERIMENT_NAME: "A_Temp_LR Experiment - Acrobot v1"
