@@ -44,6 +44,19 @@ class CustomTrainState(TrainState):
     n_updates: int
 
 
+@jax.jit
+def compute_entropy(q_vals):
+    # Convert Q-values to probabilities using softmax
+    probs = jax.nn.softmax(q_vals, axis=-1)
+
+    # Compute entropy: H = -sum(p * log(p))
+    # Add small epsilon to avoid log(0)
+    eps = 1e-8
+    entropy = -jnp.sum(probs * jnp.log(probs + eps), axis=-1)
+
+    return entropy
+
+
 def make_train(config):
 
     config["NUM_UPDATES"] = config["TOTAL_TIMESTEPS"] // config["NUM_ENVS"]
@@ -169,6 +182,9 @@ def make_train(config):
                 q_next_target = network.apply(
                     train_state.target_network_params, learn_batch.second.obs
                 )  # (batch_size, num_actions)
+
+                entropy = compute_entropy(q_next_target)
+
                 q_next_target = jnp.max(q_next_target, axis=-1)  # (batch_size,)
                 target = (
                     learn_batch.first.reward
@@ -189,7 +205,10 @@ def make_train(config):
                 loss, grads = jax.value_and_grad(_loss_fn)(train_state.params)
                 train_state = train_state.apply_gradients(grads=grads)
                 train_state = train_state.replace(n_updates=train_state.n_updates + 1)
-                return train_state, loss
+
+                results_dict = {"loss": loss.mean(), "entropy": entropy.mean()}
+
+                return train_state, results_dict
 
             rng, _rng = jax.random.split(rng)
             is_learn_time = (
@@ -201,10 +220,10 @@ def make_train(config):
                     train_state.timesteps % config["TRAINING_INTERVAL"] == 0
                 )  # training interval
             )
-            train_state, loss = jax.lax.cond(
+            train_state, results_dict = jax.lax.cond(
                 is_learn_time,
                 lambda train_state, rng: _learn_phase(train_state, rng),
-                lambda train_state, rng: (train_state, jnp.array(0.0)),  # do nothing
+                lambda train_state, rng: (train_state, {"loss": 0.0, "entropy": 0.0}),  # do nothing
                 train_state,
                 _rng,
             )
@@ -226,8 +245,9 @@ def make_train(config):
             metrics = {
                 "timesteps": train_state.timesteps,
                 "updates": train_state.n_updates,
-                "loss": loss.mean(),
+                "loss": results_dict["loss"].mean(),
                 "returns": info["returned_episode_returns"].mean(),
+                "entropy": results_dict["entropy"].mean(),
             }
 
             # report on wandb if required
