@@ -4,7 +4,7 @@ ENTITY: ""
 PROJECT: "RP-AdamLMCDQN"
 TAGS: ["DQN"]
 
-ENV_NAME: "Acrobot-v1"
+ENV_NAME: "DeepSea-bsuite"
 
 # Algorithm commons
 NUM_ENVS: 10
@@ -35,4 +35,4 @@ J: 1
 a: 1
 
 # Experiment parameters
-EXPERIMENT_NAME: "A_Temp_LR Experiment - Acrobot v1"
+EXPERIMENT_NAME: "J Experiment - DeepSea v1"
