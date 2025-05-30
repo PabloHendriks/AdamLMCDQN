@@ -40,12 +40,31 @@ class CustomTrainState(TrainState):
     timesteps: int
     n_updates: int
 
+@jax.jit
+def compute_entropy(q_vals):
+    # Convert Q-values to probabilities using softmax
+    probs = jax.nn.softmax(q_vals, axis=-1)
+
+    # Compute entropy: H = -sum(p * log(p))
+    # Add small epsilon to avoid log(0)
+    eps = 1e-8
+    entropy = -jnp.sum(probs * jnp.log(probs + eps), axis=-1)
+
+    return entropy
+
 
 def make_train(config):
 
     config["NUM_UPDATES"] = config["TOTAL_TIMESTEPS"] // config["NUM_ENVS"]
 
-    basic_env, env_params = gymnax.make(config["ENV_NAME"])
+    # Add extra parameter to specify size when running deep sea environment
+    if config["ENV_NAME"] == "DeepSea-bsuite":
+        if not config["size_deepSea"]:
+            config["size_deepSea"] = 20
+        basic_env, env_params = gymnax.make(config["ENV_NAME"], size=config["size_deepSea"])
+    else:
+        basic_env, env_params = gymnax.make(config["ENV_NAME"] )
+
     env = FlattenObservationWrapper(basic_env)
     env = LogWrapper(env)
 
@@ -101,15 +120,6 @@ def make_train(config):
             a=config['a'],
         )
 
-        # tx = optax.adam(
-        #     learning_rate=config['LR'],
-        #         beta1=config['alpha1'],
-        #         b2=config['alpha2'],
-        #         eps=config['eps'],
-        #         inverse_temperature=config['inverse_temperature'],
-        #
-        # )
-
         train_state = CustomTrainState.create(
             apply_fn=network.apply,
             params=network_params,
@@ -147,6 +157,9 @@ def make_train(config):
                 q_next_target = network.apply(
                     train_state.target_network_params, learn_batch.second.obs
                 )  # (batch_size, num_actions)
+
+                entropy = compute_entropy(q_next_target)
+
                 q_next_target = jnp.max(q_next_target, axis=-1)  # (batch_size,)
                 target = (
                         learn_batch.first.reward
@@ -188,11 +201,14 @@ def make_train(config):
 
                 train_state, (loss, loss_dict) = jax.lax.scan(j_loop, train_state, None, config['J'])
 
-                loss_dict["td_loss"] = loss_dict["td_loss"].mean()
-                loss_dict["l2_norm"] = loss_dict["l2_norm"].mean()
+                results_dict = {
+                    "td_loss": loss_dict["td_loss"].mean(),
+                    "l2_norm": loss_dict["l2_norm"].mean(),
+                    "entropy": entropy.mean(),
+                }
 
                 train_state = train_state.replace(n_updates=train_state.n_updates + 1)
-                return train_state, loss.mean(), loss_dict
+                return train_state, loss.mean(), results_dict
 
             rng, _rng = jax.random.split(rng)
             is_learn_time = (
@@ -205,10 +221,10 @@ def make_train(config):
                 )  # training interval
             )
 
-            train_state, loss, loss_dict = jax.lax.cond(
+            train_state, loss, results_dict = jax.lax.cond(
                 is_learn_time,
                 lambda train_state, rng: _learn_phase(train_state, rng),
-                lambda train_state, rng: (train_state, jnp.array(0.0), {"td_loss": 0.0, "l2_norm": 0.0}),  # do nothing
+                lambda train_state, rng: (train_state, jnp.array(0.0), {"td_loss": 0.0, "l2_norm": 0.0, "entropy": 1.0}),  # do nothing
                 train_state,
                 _rng,
             )
@@ -233,8 +249,9 @@ def make_train(config):
                 "loss": loss.mean(),
                 "returns": info["returned_episode_returns"].mean(),
                 "count": train_state.opt_state.count,
-                "td_loss": loss_dict["td_loss"],
-                "l2_norm": loss_dict["l2_norm"],
+                "td_loss": results_dict["td_loss"],
+                "l2_norm": results_dict["l2_norm"],
+                "entropy": results_dict["entropy"],
             }
 
             # report on wandb if required
@@ -275,7 +292,6 @@ def main(config):
     train_jit = jax.jit(make_train(config))
 
     for seed in seeds:
-
         wandb.init(
             entity=config["ENTITY"],
             project=config["PROJECT"],
