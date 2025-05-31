@@ -4,7 +4,7 @@ ENTITY: ""
 PROJECT: "RP-AdamLMCDQN"
 TAGS: ["DQN"]
 
-ENV_NAME: "DeepSea-bsuite"
+ENV_NAME: "CartPole-v1"
 
 # Algorithm commons
 NUM_ENVS: 10
@@ -35,4 +35,4 @@ J: 1
 a: 1
 
 # Experiment parameters
-EXPERIMENT_NAME: "J Experiment - DeepSea v1"
+EXPERIMENT_NAME: "J Experiment - CartPole v1"
