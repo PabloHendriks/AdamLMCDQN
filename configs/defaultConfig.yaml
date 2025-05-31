@@ -4,13 +4,13 @@ ENTITY: ""
 PROJECT: "RP-AdamLMCDQN"
 TAGS: ["DQN"]
 
-ENV_NAME: "CartPole-v1"
+ENV_NAME: "Freeway-MinAtar"
 
 # Algorithm commons
 NUM_ENVS: 10
 BUFFER_SIZE: 10000
 BUFFER_BATCH_SIZE: 128
-TOTAL_TIMESTEPS: 5.0e+5
+TOTAL_TIMESTEPS: 5.0e+6
 TARGET_UPDATE_INTERVAL: 500
 LR: 2.5e-4
 LEARNING_STARTS: 10000
@@ -35,4 +35,4 @@ J: 1
 a: 1
 
 # Experiment parameters
-EXPERIMENT_NAME: "J Experiment - CartPole v1"
+EXPERIMENT_NAME: "J Experiment - Freeway v1"
