@@ -16,6 +16,7 @@ def worker(base_config, a, bandit, temp):
 def egreedyWorker(base_config, bandit):
     config = base_config.copy()
     config["ENV_NAME"] = bandit
+    config["EPSILON_ANNEAL_TIME"] = 1e+5
 
     return egreedy(config)
 
