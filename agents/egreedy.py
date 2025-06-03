@@ -96,10 +96,10 @@ def make_train(config):
             sample=jax.jit(buffer.sample),
             can_sample=jax.jit(buffer.can_sample),
         )
-        rng = jax.random.PRNGKey(0)  # use a dummy rng here
-        _action = basic_env.action_space().sample(rng)
-        _, _env_state = env.reset(rng, env_params)
-        _obs, _, _reward, _done, _ = env.step(rng, _env_state, _action, env_params)
+        dummy_rng = jax.random.PRNGKey(0)  # use a dummy rng here TODO change the rng
+        _action = basic_env.action_space().sample(dummy_rng)
+        _, _env_state = env.reset(dummy_rng, env_params)
+        _obs, _, _reward, _done, _ = env.step(dummy_rng, _env_state, _action, env_params)
         _timestep = TimeStep(obs=_obs, action=_action, reward=_reward, done=_done)
         buffer_state = buffer.init(_timestep)
 
