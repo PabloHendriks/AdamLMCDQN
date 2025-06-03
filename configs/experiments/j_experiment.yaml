@@ -7,3 +7,5 @@ a: [0, 1]
 J: [1, 4, 8]
 
 size: [20, 25, 30]
+
+adaptive: 1 # 0 For no adaptive; 1 for adaptive (dividing LR by J)

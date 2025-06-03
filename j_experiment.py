@@ -12,6 +12,10 @@ def worker(base_config, a, inverse_temperature, j, size=20):
     config = base_config.copy()
     config["a"] = a
     config["inverse_temperature"] = inverse_temperature
+
+    if config["adaptive"] == 1: # Rescale the lr by the number of updates J
+        config["LR"] = config["LR"] / j
+
     config["J"] = j
     if config["ENV_NAME"] == "DeepSea-bsuite":
         config["size_deepSea"] = size
