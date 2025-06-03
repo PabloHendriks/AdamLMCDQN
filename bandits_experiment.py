@@ -4,12 +4,13 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from agents.adamLMCdqn import main as adamLMCDQN
 from agents.egreedy import main as egreedy
 
-def worker(base_config, a, bandit, temp):
+def worker(base_config, a, bandit, temp, j):
     # Copy base config to avoid shared-state mutations
     config = base_config.copy()
     config["a"] = a
     config["ENV_NAME"] = bandit
     config["inverse_temperature"] = temp
+    config["J"] = j
     # Run the training function
     return adamLMCDQN(config)
 
@@ -21,17 +22,17 @@ def egreedyWorker(base_config, bandit):
     return egreedy(config)
 
 def sequential(tasks, egreedyTasks):
-    for (base_config, a, bandit, temp) in tasks:
-        worker(base_config, a, bandit, temp)
+    for (base_config, a, bandit, temp, j) in tasks:
+        worker(base_config, a, bandit, temp, j)
 
-    for (base_config, bandit) in egreedyTasks:
-        egreedyWorker(base_config, bandit)
+    # for (base_config, bandit) in egreedyTasks:
+    #     egreedyWorker(base_config, bandit)
 
 def parallelized(tasks, egreedyTasks):
     with ProcessPoolExecutor(max_workers=10) as executor:
         futures = [
-            executor.submit(worker, cfg, a, bandit, temp)
-            for cfg, a, bandit, temp in tasks
+            executor.submit(worker, cfg, a, bandit, temp, j)
+            for cfg, a, bandit, temp, j in tasks
         ]
         for future in as_completed(futures):
             # Optionally handle return values or exceptions
@@ -59,10 +60,11 @@ if __name__ == "__main__":
     base_config["NUM_SEEDS"] = 10
 
     tasks = [
-        (base_config, a, bandit, temp)
+        (base_config, a, bandit, temp, j)
         for a in bandit_list["a"]
         for bandit in bandit_list["bandits"]
         for temp in bandit_list["inverse_temperature"]
+        for j in bandit_list["J"]
     ]
 
     egreedyTasks = [

@@ -1,3 +1,4 @@
 bandits: ["MNISTBandit-bsuite", "BernoulliBandit-misc", "GaussianBandit-misc"]
 a: [0.0, 1.0]
-inverse_temperature: [1.0e+4, 1.0e+8]
+inverse_temperature: [1.0e+8]
+J: [2, 4]
