@@ -33,6 +33,7 @@ eps: 1.0e-8
 inverse_temperature: 1.0e+8
 J: 1
 a: 1
+adaptive: 1 # 0 For no adaptive; 1 for adaptive (dividing LR by J)
 
 # Experiment parameters
 EXPERIMENT_NAME: "Adaptive J Experiment v1"
