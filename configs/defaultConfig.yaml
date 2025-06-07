@@ -36,4 +36,4 @@ a: 1
 adaptive: 1 # 0 For no adaptive; 1 for adaptive (dividing LR by J)
 
 # Experiment parameters
-EXPERIMENT_NAME: "Adaptive J Experiment v1"
+EXPERIMENT_NAME: "Bandit Experiment - v2"

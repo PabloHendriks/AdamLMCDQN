@@ -25,8 +25,8 @@ def sequential(tasks, egreedyTasks):
     for (base_config, a, bandit, temp, j) in tasks:
         worker(base_config, a, bandit, temp, j)
 
-    # for (base_config, bandit) in egreedyTasks:
-    #     egreedyWorker(base_config, bandit)
+    for (base_config, bandit) in egreedyTasks:
+        egreedyWorker(base_config, bandit)
 
 def parallelized(tasks, egreedyTasks):
     with ProcessPoolExecutor(max_workers=10) as executor:
