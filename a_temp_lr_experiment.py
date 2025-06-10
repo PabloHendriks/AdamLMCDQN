@@ -7,12 +7,15 @@ from agents.adamLMCdqn import main as adamLMCDQN
 from agents.egreedy import main as egreedy
 
 
-def worker(base_config, a, inverse_temperature, lr):
+def worker(base_config, a, inverse_temperature, lr, size=20):
     # Copy base config to avoid shared-state mutations
     config = base_config.copy()
     config["a"] = a
     config["inverse_temperature"] = inverse_temperature
     config["LR"] = lr
+
+    if config["ENV_NAME"] == "DeepSea-bsuite":
+        config["size_deepSea"] = size
 
     return adamLMCDQN(config)
 
@@ -27,8 +30,12 @@ def parallelized(tasks):
             result = future.result()
 
 def sequential(tasks):
-    for cfg, a, inv, lr in tasks:
-        worker(cfg, a, inv, lr)
+    if tasks[0][0]["ENV_NAME"] == "DeepSea-bsuite":
+        for cfg, a, inv, lr, size in tasks:
+            worker(cfg, a, inv, lr, size)
+    else:
+        for cfg, a, inv, lr in tasks:
+            worker(cfg, a, inv, lr)
 
 if __name__ == "__main__":
     # Load base configuration
@@ -39,12 +46,21 @@ if __name__ == "__main__":
     with open("configs/experiments/a_and_inv_temp_v2.yaml", "r") as f:
         sweep = yaml.safe_load(f)
 
-    tasks = [
-        (base_config, a, inv_temp, lr)
-        for a in sweep["a"]
-        for inv_temp in sweep["inverse_temperature"]
-        for lr in sweep['LR']
-    ]
+    if base_config["ENV_NAME"] == "DeepSea-bsuite":
+        tasks = [
+            (base_config, a, inv_temp, lr, size)
+            for a in sweep["a"]
+            for inv_temp in sweep["inverse_temperature"]
+            for lr in sweep['LR']
+            for size in sweep["size"]
+        ]
+    else :
+        tasks = [
+            (base_config, a, inv_temp, lr)
+            for a in sweep["a"]
+            for inv_temp in sweep["inverse_temperature"]
+            for lr in sweep['LR']
+        ]
 
     if sweep["mode"] == "parallelized":
         parallelized(tasks)
