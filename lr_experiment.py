@@ -10,7 +10,7 @@ def worker(base_config, a, env, lr, size=20):
     config["a"] = a
     config["ENV_NAME"] = env
     config["LR"] = lr
-    config["EXPERIMENT_NAME"] = "CartPole LR Experiment v1"
+    config["EXPERIMENT_NAME"] = "Freeway LR Experiment v1"
 
     if env == "DeepSea-bsuite":
         config["size_deepSea"] = size
@@ -31,8 +31,8 @@ def sequential(cartPole_tasks, deepSea_tasks):
     for (base_config, a, env, lr) in cartPole_tasks:
         worker(base_config, a, env, lr)
 
-    for (base_config, a, env, lr, size) in deepSea_tasks:
-        worker(base_config, a, env, lr, size)
+    # for (base_config, a, env, lr, size) in deepSea_tasks:
+    #     worker(base_config, a, env, lr, size)
 
 if __name__ == "__main__":
     # Load base configuration
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         env_list = yaml.safe_load(f)
 
     cartPole_tasks = [
-        (base_config, a, "CartPole-v1", lr)
+        (base_config, a, "Freeway-MinAtar", lr)
         for a in env_list["a"]
         for lr in env_list["lr"]
     ]

@@ -1,6 +1,7 @@
 mode: "sequential"
 
-envs: ["CartPole-v1", "DeepSea-bsuite"]
+#envs: ["CartPole-v1", "DeepSea-bsuite"]
+envs: ["Freeway-MinAtar"]
 
 a: [0.0, 1.0]
 
