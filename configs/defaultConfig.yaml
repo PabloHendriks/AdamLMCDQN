@@ -4,7 +4,7 @@ ENTITY: ""
 PROJECT: "RP-AdamLMCDQN"
 TAGS: ["DQN"]
 
-ENV_NAME: "DeepSea-bsuite"
+ENV_NAME: "CartPole-v1"
 
 # Algorithm commons
 NUM_ENVS: 10
@@ -36,4 +36,4 @@ a: 1
 adaptive: 0 # 0 For no adaptive; 1 for adaptive (dividing LR by J)
 
 # Experiment parameters
-EXPERIMENT_NAME: "DeepSea LR Experiment v1"
+EXPERIMENT_NAME: "CartPole Temp a Experiment v3"
