@@ -11,6 +11,7 @@ def worker(base_config, a, env, lr, size=20):
     config["ENV_NAME"] = env
     config["LR"] = lr
     config["EXPERIMENT_NAME"] = "Freeway LR Experiment v1"
+    config["inv_temperature"] = 100000
 
     if env == "DeepSea-bsuite":
         config["size_deepSea"] = size
