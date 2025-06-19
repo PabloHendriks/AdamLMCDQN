@@ -10,12 +10,12 @@ def worker(base_config, a, env, lr, size=20):
     config["a"] = a
     config["ENV_NAME"] = env
     config["LR"] = lr
-    config["EXPERIMENT_NAME"] = "Freeway LR Experiment v1"
-    config["inv_temperature"] = 100000
+    # config["EXPERIMENT_NAME"] = "Freeway LR Experiment v1"
+    config["inverse_temperature"] = 1000
 
     if env == "DeepSea-bsuite":
         config["size_deepSea"] = size
-        config["EXPERIMENT_NAME"] = "DeepSea LR Experiment v1"
+        config["EXPERIMENT_NAME"] = "DeepSea LR Experiment v2"
 
 
     # Run the training function
