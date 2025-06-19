@@ -29,11 +29,11 @@ def worker(base_config, a, env, lr, size=20):
 #     return egreedy(config)
 
 def sequential(cartPole_tasks, deepSea_tasks):
-    for (base_config, a, env, lr) in cartPole_tasks:
-        worker(base_config, a, env, lr)
+    # for (base_config, a, env, lr) in cartPole_tasks:
+    #     worker(base_config, a, env, lr)
 
-    # for (base_config, a, env, lr, size) in deepSea_tasks:
-    #     worker(base_config, a, env, lr, size)
+    for (base_config, a, env, lr, size) in deepSea_tasks:
+        worker(base_config, a, env, lr, size)
 
 if __name__ == "__main__":
     # Load base configuration
