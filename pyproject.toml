@@ -1,7 +1,7 @@
 [project]
 name = "adamlmcdqn"
 version = "0.1.0"
-description = "Add your description here"
+description = "JAX implementations of the LMC-LSVI and Adam LMCDQN algorithms by Pablo Hendriks Bardaji."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
