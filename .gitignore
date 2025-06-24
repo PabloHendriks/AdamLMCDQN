@@ -4,6 +4,7 @@ wandb
 # data and plots
 data
 images
+plotters
 
 
 # Byte-compiled / optimized / DLL files
