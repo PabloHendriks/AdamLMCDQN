@@ -1,6 +1,4 @@
 import yaml
-import os
-import jax
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from agents.adamLMCdqn import main as adamLMCDQN
@@ -24,7 +22,7 @@ def worker(base_config, a, inverse_temperature, j, size=20):
 
 def parallelized(tasks):
     if tasks[0][0]["ENV_NAME"] == "DeepSea-bsuite":
-        with ProcessPoolExecutor(max_workers=12) as executor:
+        with ProcessPoolExecutor(max_workers=10) as executor:
             futures = [
                 executor.submit(worker, cfg, a, inv, j, size)
                 for cfg, a, inv, j, size in tasks
@@ -33,7 +31,7 @@ def parallelized(tasks):
                 # Optionally handle return values or exceptions
                 result = future.result()
     else:
-        with ProcessPoolExecutor(max_workers=12) as executor:
+        with ProcessPoolExecutor(max_workers=10) as executor:
             futures = [
                 executor.submit(worker, cfg, a, inv, j)
                 for cfg, a, inv, j in tasks
