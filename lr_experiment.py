@@ -1,5 +1,4 @@
 import yaml
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from agents.adamLMCdqn import main as adamLMCDQN
 from agents.egreedy import main as egreedy
@@ -10,27 +9,23 @@ def worker(base_config, a, env, lr, size=20):
     config["a"] = a
     config["ENV_NAME"] = env
     config["LR"] = lr
-    # config["EXPERIMENT_NAME"] = "Freeway LR Experiment v1"
-    config["inverse_temperature"] = 1000
 
     if env == "DeepSea-bsuite":
         config["size_deepSea"] = size
         config["EXPERIMENT_NAME"] = "DeepSea LR Experiment v2"
 
-
     # Run the training function
     return adamLMCDQN(config)
 
-# def egreedyWorker(base_config, env):
-#     config = base_config.copy()
-#     config["ENV_NAME"] = env
-#     config["EPSILON_ANNEAL_TIME"] = 1e+5
-#
-#     return egreedy(config)
+def egreedyWorker(base_config, env):
+    config = base_config.copy()
+    config["ENV_NAME"] = env
 
-def sequential(cartPole_tasks, deepSea_tasks):
-    # for (base_config, a, env, lr) in cartPole_tasks:
-    #     worker(base_config, a, env, lr)
+    return egreedy(config)
+
+def sequential(tasks, deepSea_tasks):
+    for (base_config, a, env, lr) in tasks:
+        worker(base_config, a, env, lr)
 
     for (base_config, a, env, lr, size) in deepSea_tasks:
         worker(base_config, a, env, lr, size)
@@ -44,10 +39,11 @@ if __name__ == "__main__":
     with open("configs/experiments/lr_experiment.yaml", "r") as f:
         env_list = yaml.safe_load(f)
 
-    cartPole_tasks = [
-        (base_config, a, "Freeway-MinAtar", lr)
+    tasks = [
+        (base_config, a, env_name, lr)
         for a in env_list["a"]
         for lr in env_list["lr"]
+        for env_name in env_list["envs"]
     ]
 
     deepSea_tasks = [
@@ -57,12 +53,14 @@ if __name__ == "__main__":
         for lr in env_list["lr"]
     ]
 
-    # egreedyTasks = [
-    #     (base_config, env) for env in env_list["envs"]
-    # ]
+    egreedyTasks = [
+        (base_config, env) for env in env_list["envs"]
+    ]
 
     if env_list.get("mode", "sequential") == "parallelized":
         raise ValueError("Parallel not implemented")
     else:
-        sequential(cartPole_tasks, deepSea_tasks)
+        sequential(tasks, deepSea_tasks)
 
+    for task in egreedyTasks:
+        egreedyWorker(*task)
