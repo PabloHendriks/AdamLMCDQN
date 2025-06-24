@@ -11,7 +11,7 @@ from gymnax.wrappers.purerl import FlattenObservationWrapper, LogWrapper
 import gymnax
 import flashbax as fbx
 
-from optimizers.optimizer import langevin_adam
+from optimizers.adamLMCDQN_optimiser import langevin_adam
 
 
 class QNetwork(nn.Module):
