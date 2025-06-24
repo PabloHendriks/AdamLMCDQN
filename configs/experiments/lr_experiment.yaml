@@ -1,11 +1,11 @@
-mode: "sequential"
+# Config for learning rate experiment, to change the inverse temperature, modify the field in defaultConfig.yaml
 
-envs: ["DeepSea-bsuite"]
-#envs: ["CartPole-v1", "Freeway-MinAtar"]
+mode: "sequential" # To run sequentially or parallel experiments
 
-a: [0.0, 1.0]
+envs: ["CartPole-v1", "DeepSea-bsuite"] # Different environments to test
 
-lr: [2.5e-6, 2.5e-5, 7.5e-5, 1.25e-4, 2.5e-4, 5.0e-4, 1.0e-3]
+a: [0.0, 1.0] # 0.0 for LMC-LSVI, > 0.0 for Adam LMCDQN
 
-size: [20]
-#  , 25]
+lr: [2.5e-6, 2.5e-5, 7.5e-5, 1.25e-4, 2.5e-4, 5.0e-4, 1.0e-3] # Different learning rates, these will overwrite the defaultConfig.yaml
+
+size: [20] # Only for deep sea (different sizes of the environment)
