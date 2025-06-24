@@ -5,7 +5,7 @@
 This repository contains an implementation of a Deep Q-Network (DQN) reinforcement learning algorithm. We implement the LMC-LSVI and Adam LMCDQN algorithms, as proposed by [Provable and Practical: Efficient Exploration in Reinforcement Learning via Langevin Monte Carlo](https://arxiv.org/abs/2305.18246).
 We implement the algorithms in JAX, a high-performance numerical computing library. For environment-specific implementations, we use the [gymnax](https://github.com/RobertTLange/gymnax?tab=readme-ov-file) as they offer fully vectorised environments. 
 
-This repository is part of the thesis work of Pablo Hendriks Bardaji made for the [Research Project](https://github.com/TU-Delft-CSE/Research-Project) (CSE 3000) at the TU Delft (2025). 
+This repository is part of the thesis work of Pablo Hendriks Bardaji, supervised by Pascal van der Vaart and Neil Yorke-Smith, made for the [Research Project](https://github.com/TU-Delft-CSE/Research-Project) (CSE 3000) at the TU Delft (2025). 
 
 ## Installation
 
