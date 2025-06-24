@@ -1,0 +1,9 @@
+# Config file for running the robust set experiment. To change the environment, modify the defaultConfig.yaml file
+
+mode: "sequential"
+
+inverse_temperature: [1.0e+3, 1.0e+4, 1.0e+5, 1.0e+6, 1.0e+8, 1.0e+12] # Different values for inverse temperature
+
+a: [1, 1.5, 2, 3] # Different values for a, 0.0 for LMC-LSVI, > 0.0 for Adam LMCDQN
+
+LR: [2.5e-4] # Learning rate, this will overwrite the defaultConfig.yaml
