@@ -1,0 +1,12 @@
+# Config for running experiments with different values for a and inverse temperature. It also supports different learning rates
+# To change the environment, modify the defaultConfig.yaml file
+
+mode: "sequential"
+
+inverse_temperature: [1, 1.0e+3, 1.0e+5, 1.0e+8, 1.0e+12, 1.0e+20] # Different values for inverse temperature
+
+a: [0, 0.1, 0.5, 1, 5] # Different values for a, 0.0 for LMC-LSVI, > 0.0 for Adam LMCDQN
+
+LR: [2.5e-4] # Learning rate, this will overwrite the defaultConfig.yaml
+
+size: [20, 25, 30] # Only for deep sea (different sizes of the environment)

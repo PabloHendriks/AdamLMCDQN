@@ -20,7 +20,7 @@ def worker(base_config, a, inverse_temperature, lr, size=20):
     return adamLMCDQN(config)
 
 def parallelized(tasks):
-    with ProcessPoolExecutor(max_workers=12) as executor:
+    with ProcessPoolExecutor(max_workers=10) as executor:
         futures = [
             executor.submit(worker, cfg, a, inv, lr)
             for cfg, a, inv, lr in tasks
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         base_config = yaml.safe_load(f)
 
     # Load hyperparameter sweep values
-    with open("configs/experiments/a_and_inv_temp_v2.yaml", "r") as f:
+    with open("configs/experiments/a_and_inv_temp_experiments.yaml", "r") as f:
         sweep = yaml.safe_load(f)
 
     if base_config["ENV_NAME"] == "DeepSea-bsuite":
