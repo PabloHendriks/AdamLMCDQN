@@ -1,5 +1,7 @@
 bandits: ["MNISTBandit-bsuite", "BernoulliBandit-misc", "GaussianBandit-misc"]
-a: [0.0, 1.0]
+
+a: [0.0, 1.0] # 0.0 for LMC-LSVI and > 0.0 for Adam LMCDQN
+
 inverse_temperature: [1.0e+8]
-#J: [2, 4]
+
 J: [1]
