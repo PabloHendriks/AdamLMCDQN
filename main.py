@@ -7,7 +7,7 @@ def run():
     with open("configs/defaultConfig.yaml", "r") as f:
         config = yaml.safe_load(f)
 
-    # adamLMCDQN(config=config)
+    adamLMCDQN(config=config)
     egreedy(config=config)
 
 
