@@ -4,7 +4,7 @@ import optax
 
 from jax.scipy.special import logsumexp
 
-from optimizers.optimizer import langevin_adam
+from optimizers.adamLMCDQN_optimiser import langevin_adam
 
 key = jax.random.PRNGKey(0)
 dim = 2
@@ -101,8 +101,8 @@ def main():
     # fig.colorbar(hb[3], ax=ax1)
 
     plt.tight_layout()
-    plt.show()
-
+    # plt.show()
+    plt.savefig("langevin_samples.png", dpi=300)
 
 if __name__ == '__main__':
     main()
